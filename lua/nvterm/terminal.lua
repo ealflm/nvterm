@@ -119,6 +119,10 @@ nvterm.new = function(type, shell_override)
   a.nvim_buf_set_option(buf, "buflisted", false)
   a.nvim_win_set_buf(win, buf)
 
+  if type == "lazygit" then
+    shell_override = "lazygit"
+  end
+
   local job_id = vim.fn.termopen(terminals.shell or shell_override or vim.o.shell)
   local id = #terminals.list + 1
   local term = { id = id, win = win, buf = buf, open = true, type = type, job_id = job_id }
