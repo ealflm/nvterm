@@ -1,6 +1,6 @@
 local util = {}
 local a = vim.api
-local float_types = { "float", "lazygit", "diffview", "diffblank" }
+local float_types = { "float", "lazygit", "diffview", "diffblank", "nvwork" }
 
 util.calc_float_opts = function(opts)
   return {
@@ -40,6 +40,9 @@ util.execute_type_cmd = function(type, terminals, override)
       a.nvim_open_win(0, true, dims)
     end,
     diffblank = function()
+      a.nvim_open_win(0, true, dims)
+    end,
+    nvwork = function()
       a.nvim_open_win(0, true, dims)
     end,
   }

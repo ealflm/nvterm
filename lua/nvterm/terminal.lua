@@ -89,7 +89,9 @@ nvterm.show_term = function(term)
   term.win = create_term_window(term.type)
   a.nvim_win_set_buf(term.win, term.buf)
   terminals.list[term.id].open = true
-  vim.cmd "startinsert"
+  if terminals.list[term.id].type ~= "nvwork" then
+    vim.cmd "startinsert"
+  end
 end
 
 nvterm.get_and_show = function(key, value)
@@ -129,12 +131,30 @@ nvterm.new = function(type, shell_override)
   return term
 end
 
+nvterm.new_nvwork = function(type)
+  local win = create_term_window(type)
+  local buf = a.nvim_create_buf(false, true)
+  a.nvim_buf_set_option(buf, "buflisted", false)
+  a.nvim_win_set_buf(win, buf)
+
+  vim.cmd("e " .. vim.g.nvwork_selected_file)
+
+  local id = #terminals.list + 1
+  local term = { id = id, win = win, buf = buf, open = true, type = type }
+  terminals.list[id] = term
+  return term
+end
+
 nvterm.toggle = function(type)
   terminals = util.verify_terminals(terminals)
   local term = get_type_last(type)
 
   if not term then
-    term = nvterm.new(type)
+    if (type == "nvwork") then
+      term = nvterm.new_nvwork(type)
+    else
+      term = nvterm.new(type)
+    end
   elseif term.open then
     nvterm.hide_term(term)
   else
