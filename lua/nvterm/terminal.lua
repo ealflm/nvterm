@@ -139,6 +139,9 @@ nvterm.new_nvwork = function(type)
 
   vim.cmd("e " .. vim.g.nvwork_selected_file)
 
+  -- This line hides the current buffer from tabline in some way.
+  vim.cmd(vim.bo.buflisted and "set nobl" or "hide")
+
   local id = #terminals.list + 1
   local term = { id = id, win = win, buf = buf, open = true, type = type }
   terminals.list[id] = term
