@@ -46,6 +46,7 @@ local create_term_window = function(type)
   util.execute_type_cmd(type, terminals, existing)
   vim.wo.relativenumber = false
   vim.wo.number = false
+  a.nvim_win_set_option(a.nvim_get_current_win(), 'signcolumn', 'no')
   return a.nvim_get_current_win()
 end
 
@@ -113,17 +114,14 @@ nvterm.show = function(type)
 end
 
 nvterm.new = function(type, shell_override)
+  local opts = terminals.type_opts[type]
   local win = create_term_window(type)
   local buf = a.nvim_create_buf(false, true)
   a.nvim_buf_set_option(buf, "filetype", "terminal")
   a.nvim_buf_set_option(buf, "buflisted", false)
   a.nvim_win_set_buf(win, buf)
 
-  if type == "lazygit" then
-    shell_override = "lazygit"
-  end
-
-  local job_id = vim.fn.termopen(terminals.shell or shell_override or vim.o.shell)
+  local job_id = vim.fn.termopen(opts.shell or terminals.shell or shell_override or vim.o.shell)
   local id = #terminals.list + 1
   local term = { id = id, win = win, buf = buf, open = true, type = type, job_id = job_id }
   terminals.list[id] = term
