@@ -162,6 +162,13 @@ nvterm.toggle = function(type)
     nvterm.hide_term(term)
   else
     nvterm.show_term(term)
+
+    if (type == "nvwork") then
+      if vim.fn.expand('%:p') ~= vim.g.nvwork_selected_file then
+        vim.cmd("e " .. vim.g.nvwork_selected_file)
+        vim.cmd(vim.bo.buflisted and "set nobl" or "hide")
+      end
+    end
   end
 end
 
