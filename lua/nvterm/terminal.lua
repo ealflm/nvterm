@@ -191,6 +191,27 @@ nvterm.close_all_terms = function()
   end
 end
 
+nvterm.kill_terminals = function()
+  if (#terminals.list <= 0) then
+    return
+  end
+
+  local cmd = "!taskkill /F"
+  local count = 0
+
+  for _, term in ipairs(terminals.list) do
+    local ok, pid = pcall(vim.fn.jobpid, term.job_id)
+    if (ok) then
+      cmd = cmd .. " /PID " .. pid
+      count = count + 1
+    end
+  end
+  
+  if (count > 0) then
+    vim.cmd(cmd)
+  end
+end
+
 nvterm.list_active_terms = function(property)
   local terms = get_still_open()
   if property then
