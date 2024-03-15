@@ -30,7 +30,7 @@ local set_behavior = function(behavior)
   if behavior.autoclose_on_quit.enabled then
     vim.api.nvim_create_autocmd({ "QuitPre" }, {
       callback = function()
-        require("nvterm.terminal").kill_terminals()
+        require("nvterm.terminal").kill_terminals_bat()
       end,
     })
   end
