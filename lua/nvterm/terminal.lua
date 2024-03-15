@@ -124,6 +124,14 @@ nvterm.new = function(type, shell_override)
   a.nvim_win_set_buf(win, buf)
 
   local job_id = vim.fn.termopen(opts.shell or terminals.shell or shell_override or vim.o.shell)
+
+  local ok, pid = pcall(vim.fn.jobpid, job_id)
+  if ok then
+    local cwd = vim.fn.expand "~/"
+    local cmd = pid .. " >> " .. cwd .. terminals.nvterm_info
+    vim.fn.jobstart(cmd)
+  end
+
   local id = #terminals.list + 1
   local term = { id = id, win = win, buf = buf, open = true, type = type, job_id = job_id }
   terminals.list[id] = term
