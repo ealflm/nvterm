@@ -46,7 +46,7 @@ local create_term_window = function(type)
   util.execute_type_cmd(type, terminals, existing)
   vim.wo.relativenumber = false
   vim.wo.number = false
-  a.nvim_win_set_option(a.nvim_get_current_win(), 'signcolumn', 'no')
+  a.nvim_win_set_option(a.nvim_get_current_win(), "signcolumn", "no")
   return a.nvim_get_current_win()
 end
 
@@ -153,7 +153,7 @@ nvterm.toggle = function(type)
   local term = get_type_last(type)
 
   if not term then
-    if (type == "nvwork") then
+    if type == "nvwork" then
       term = nvterm.new_nvwork(type)
     else
       term = nvterm.new(type)
@@ -163,8 +163,8 @@ nvterm.toggle = function(type)
   else
     nvterm.show_term(term)
 
-    if (type == "nvwork") then
-      if vim.fn.expand('%:p') ~= vim.g.nvwork_selected_file then
+    if type == "nvwork" then
+      if vim.fn.expand "%:p" ~= vim.g.nvwork_selected_file then
         vim.cmd("e " .. vim.g.nvwork_selected_file)
         vim.cmd(vim.bo.buflisted and "set nobl" or "hide")
       end
@@ -184,7 +184,6 @@ nvterm.toggle_all_terms = function()
   end
 end
 
-
 nvterm.close_all_terms = function()
   for _, buf in ipairs(nvterm.list_active_terms "buf") do
     vim.cmd("bd! " .. tostring(buf))
@@ -192,7 +191,7 @@ nvterm.close_all_terms = function()
 end
 
 nvterm.kill_terminals = function()
-  if (#terminals.list <= 0) then
+  if #terminals.list <= 0 then
     return
   end
 
@@ -201,13 +200,13 @@ nvterm.kill_terminals = function()
 
   for _, term in ipairs(terminals.list) do
     local ok, pid = pcall(vim.fn.jobpid, term.job_id)
-    if (ok) then
+    if ok then
       cmd = cmd .. " /PID " .. pid
       count = count + 1
     end
   end
-  
-  if (count > 0) then
+
+  if count > 0 then
     vim.cmd(cmd)
   end
 end
