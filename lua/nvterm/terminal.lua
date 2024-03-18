@@ -60,7 +60,7 @@ local ensure_and_send = function(cmd, type)
     end
   end
   local term = select_term()
-  a.nvim_chan_send(term.job_id, cmd .. "\n")
+  a.nvim_chan_send(term.job_id, cmd)
 end
 
 local call_and_restore = function(fn, opts)
