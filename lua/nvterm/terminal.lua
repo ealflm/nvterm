@@ -73,6 +73,10 @@ local call_and_restore = function(fn, opts)
   vim.cmd(mode)
 end
 
+nvterm.is_term_open = function(type)
+  return get_type_last(type) and true or false
+end
+
 nvterm.send = function(cmd, type)
   if not cmd then
     return
